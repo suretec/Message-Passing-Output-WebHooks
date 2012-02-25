@@ -11,7 +11,12 @@ $VERSION = eval $VERSION;
 with 'Log::Stash::Role::Output';
 
 has log => (
-    does => 'Log::Stash::
+    does => 'Log::Stash::Role::Output',
+    handles => {
+        log => 'consume',
+    },
+    default => sub { require Log::Stash::Output::Null; Log::Stash::Output::Null->new },
+);
 
 sub consume {
     my ($self, $data) = @_;
@@ -21,9 +26,14 @@ sub consume {
     #warn "MAKE POST to " . $data->{url};
     my $headers = {};
     http_post $data->{url}, $body, headers => $headers, sub {
-        my ($data, $headers) = @_;
-        #warn "POST CALLBACK";
-        #use Data::Dumper; warn Dumper(\@_);
+        my ($body, $headers) = @_;
+        warn "POST CALLBACK";
+        if ($headers->{Status} =~ /2\d\d/) {
+            $self->log(Success->new(
+                url => $data->{url},
+            ));
+        }
+        use Data::Dumper; warn Dumper(\@_);
     };
 }
 
