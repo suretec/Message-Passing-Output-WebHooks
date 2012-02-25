@@ -13,6 +13,7 @@ requires 'JSON::XS';
 requires 'Try::Tiny';
 requires 'Log::Message::Structured' => '0.005';
 requires 'aliased';
+requires 'Log::Stash' => '0.001';
 
 test_requires 'Plack';
 test_requires 'Twiggy';
