@@ -75,9 +75,67 @@ sub consume {
 
 Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
 
+=head1 SYNOPSIS
+
+    logstash --input STDIN --output WebHooks
+
+    You type:
+    {"@url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
+
+    Causes:
+    
+    POST /test HTTP/1.1
+    Host: localhost:5000
+    Content-Length: 13
+    Content-Type application/json
+
+    {"foo":"bar"}
+
 =head1 WHAT IS A WEBHOOK
 
+A webhook is an a notification method used by APIs.
+
+The idea is that you (as a client) define a URI on your website which is called when a certain action
+happens at your API provider. Some data relevant to the event is serialized out to you, allowing you
+to take action.
+
+The canonical example is Paypal's IPN system, in which Paypal make a call to your online payment system to
+verfiy that a payment has been made.
+
+See the L</SEE ALSO> section below for other examples.
+
 =head1 DESCRIPTION
+
+This class expects to have it's consume method called with a has of parameters, including:
+
+=over
+
+=item @url
+
+The URL to make the request to.
+
+=item data
+
+The data to serialize out to the HTTP post request
+
+=back
+
+=head1 USEAGE
+
+As a L<Log::Stash> component, input is easy - if you're writing asynchronous perl code already,
+you can use the L<Log::Stash::Output::WebHooks> class directly in your perl code, or
+you can use L<Log::Dispatch::Log::Stash> to divert your application logs into it via the
+L<Log::Dispatch> framework. 
+
+If you're not already an L<AnyEvent> perl app (most people!), then you can use
+L<Log::Stash::Input::STDIN>, L<Log::Stash::Input::ZeroMQ>
+or any other input class, and the command line logstash utility supplied to run a worker
+process, then send messages to it.
+
+To send messages, you can either use Java or Ruby logstash L<http://logstash.net/>, or
+if you're in perl, then it's entirely possible to use the L<ZeroMQ> output component,
+L<Log::Stash::Output::ZeroMQ> from within a normal perl application (via L<Log::Dispatch::Log::Stash>
+or directly).
 
 =head1 SEE ALSO
 
