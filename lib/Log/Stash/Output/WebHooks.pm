@@ -1,12 +1,17 @@
 package Log::Stash::Output::WebHooks;
 use Moose;
 use AnyEvent::HTTP;
+use aliased 'Log::Stash::WebHooks::Event::Call::Success';
+use aliased 'Log::Stash::WebHooks::Event::Call::Timeout';
 use namespace::autoclean;
 
 our $VERSION = '0.001';
 $VERSION = eval $VERSION;
 
-with 'Log::Stash::Mixin::Output';
+with 'Log::Stash::Role::Output';
+
+has log => (
+    does => 'Log::Stash::
 
 sub consume {
     my ($self, $data) = @_;
