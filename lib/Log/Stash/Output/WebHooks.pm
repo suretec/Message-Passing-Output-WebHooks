@@ -20,20 +20,20 @@ has log => (
 
 sub consume {
     my ($self, $data) = @_;
-    my $body = $self->encode($data->{parameters});
+    my $body = $self->encode($data->{data});
     # XXX FIXME http://wiki.shopify.com/Verifying_Webhooks
     # HMAC goes here.
     #warn "MAKE POST to " . $data->{url};
     my $headers = {};
     http_post $data->{url}, $body, headers => $headers, sub {
         my ($body, $headers) = @_;
-        warn "POST CALLBACK";
+        #warn "POST CALLBACK";
         if ($headers->{Status} =~ /2\d\d/) {
             $self->log(Success->new(
                 url => $data->{url},
             ));
         }
-        use Data::Dumper; warn Dumper(\@_);
+        #use Data::Dumper; warn Dumper(\@_);
     };
 }
 

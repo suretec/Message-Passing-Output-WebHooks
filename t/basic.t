@@ -30,7 +30,7 @@ my $publish; $publish = AnyEvent->idle(cb => sub {
      undef $publish;
     $output->consume({
         url => "http://localhost:5000/",
-        parameters => {
+        data => {
             foo => "bar",
         },
     });
@@ -41,6 +41,7 @@ is $cv->recv, '{"foo":"bar"}';
 my $log_event = $log_cv->recv;
 is $log_event . '', 'webhook call to http://localhost:5000/ succeeded';
 isa_ok($log_event, 'Log::Stash::WebHooks::Event::Call::Success');
+is $log_event->url, 'http://localhost:5000/';
 
 done_testing;
 
