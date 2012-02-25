@@ -6,13 +6,20 @@ use Log::Stash::Output::WebHooks;
 use Log::Stash::Output::Test;
 use Plack::Request;
 
+my $respond;
 my $cv = AnyEvent->condvar;
 my $app = sub {
     my $env = shift;
     my $r = Plack::Request->new($env);
     my $bytes = $r->content;
     $cv->send($bytes);
-    if (my ($code) = $env->{PATH_INFO} =~ m{/code/(\d+)}) {
+    if ($env->{PATH_INFO} eq '/timeout') {
+        return sub {
+            $respond = shift;
+            # $respond->([ 200, $headers, [ $content ] ]);
+        };
+    }
+    if (my ($code) = $env->{PATH_INFO} =~ m{^/code/(\d+)$}) {
         return [ $code, [ 'Content-Type' => 'text/html' ], [ "Error $code" ] ];
     }
     return [ '200', [ 'Content-Type' => 'text/html' ], [ "Ok" ] ]
@@ -26,7 +33,7 @@ my $log_cv = AnyEvent->condvar;
 my $log = Log::Stash::Output::Test->new(
     on_consume_cb => sub { $log_cv->send(shift()) },
 );
-my $output = Log::Stash::Output::WebHooks->new(log => $log);
+my $output = Log::Stash::Output::WebHooks->new(log => $log, timeout => 2,);
 
 my $publish; $publish = AnyEvent->idle(cb => sub {
      undef $publish;
@@ -64,6 +71,26 @@ is $log_event . '', 'webhook call to http://localhost:5000/code/500 failed, retu
 isa_ok($log_event, 'Log::Stash::WebHooks::Event::Call::Failure');
 is $log_event->url, 'http://localhost:5000/code/500';
 is $log_event->code, '500';
+
+$cv = AnyEvent->condvar;
+$log_cv = AnyEvent->condvar;
+
+$publish = AnyEvent->idle(cb => sub {
+     undef $publish;
+    $output->consume({
+        url => "http://localhost:5000/timeout",
+        data => {
+            foo => "bar",
+        },
+    });
+});
+is $cv->recv, '{"foo":"bar"}', "Please wait - testing timeouts";
+
+$log_event = $log_cv->recv;
+is $log_event . '', 'webhook call to http://localhost:5000/timeout timed out';
+isa_ok($log_event, 'Log::Stash::WebHooks::Event::Call::Timeout');
+is $log_event->url, 'http://localhost:5000/timeout';
+undef $respond;
 
 done_testing;
 
