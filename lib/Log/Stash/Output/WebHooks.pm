@@ -3,6 +3,7 @@ use Moose;
 use AnyEvent::HTTP;
 use aliased 'Log::Stash::WebHooks::Event::Call::Success';
 use aliased 'Log::Stash::WebHooks::Event::Call::Timeout';
+use aliased 'Log::Stash::WebHooks::Event::Call::Failure';
 use namespace::autoclean;
 
 our $VERSION = '0.001';
@@ -18,6 +19,12 @@ has log => (
     default => sub { require Log::Stash::Output::Null; Log::Stash::Output::Null->new },
 );
 
+has timeout => (
+    isa => 'Int',
+    is => 'ro',
+    default => 300,
+);
+
 sub consume {
     my ($self, $data) = @_;
     my $body = $self->encode($data->{data});
@@ -25,16 +32,41 @@ sub consume {
     # HMAC goes here.
     #warn "MAKE POST to " . $data->{url};
     my $headers = {};
-    http_post $data->{url}, $body, headers => $headers, sub {
-        my ($body, $headers) = @_;
-        #warn "POST CALLBACK";
-        if ($headers->{Status} =~ /2\d\d/) {
-            $self->log(Success->new(
+    my $timeout = $self->timeout;
+    my ($timer, $guard);
+    $timer = AnyEvent->timer(
+        after => $timeout,
+        cb => sub {
+            undef $guard;
+            undef $timer;
+            $self->log(Timeout->new(
                 url => $data->{url},
             ));
-        }
-        #use Data::Dumper; warn Dumper(\@_);
-    };
+        },
+    );
+    $guard = http_post
+        $data->{url},
+        $body,
+        headers => $headers,
+        timeout => $timeout + 5,
+        sub {
+            undef $guard;
+            undef $timer;
+            my ($body, $headers) = @_;
+            #warn "POST CALLBACK";
+            if ($headers->{Status} =~ /2\d\d/) {
+                $self->log(Success->new(
+                    url => $data->{url},
+                ));
+            }
+            else {
+                $self->log(Failure->new(
+                    url => $data->{url},
+                    code => $headers->{Status},
+                ));
+            }
+            #use Data::Dumper; warn Dumper(\@_);
+        };
 }
 
 1;

@@ -12,7 +12,9 @@ my $app = sub {
     my $r = Plack::Request->new($env);
     my $bytes = $r->content;
     $cv->send($bytes);
-#    warn Dumper($env);
+    if (my ($code) = $env->{PATH_INFO} =~ m{/code/(\d+)}) {
+        return [ $code, [ 'Content-Type' => 'text/html' ], [ "Error $code" ] ];
+    }
     return [ '200', [ 'Content-Type' => 'text/html' ], [ "Ok" ] ]
 };
 
@@ -42,6 +44,26 @@ my $log_event = $log_cv->recv;
 is $log_event . '', 'webhook call to http://localhost:5000/ succeeded';
 isa_ok($log_event, 'Log::Stash::WebHooks::Event::Call::Success');
 is $log_event->url, 'http://localhost:5000/';
+
+$cv = AnyEvent->condvar;
+$log_cv = AnyEvent->condvar;
+
+$publish = AnyEvent->idle(cb => sub {
+     undef $publish;
+    $output->consume({
+        url => "http://localhost:5000/code/500",
+        data => {
+            foo => "bar",
+        },
+    });
+});
+is $cv->recv, '{"foo":"bar"}';
+
+$log_event = $log_cv->recv;
+is $log_event . '', 'webhook call to http://localhost:5000/code/500 failed, return code 500';
+isa_ok($log_event, 'Log::Stash::WebHooks::Event::Call::Failure');
+is $log_event->url, 'http://localhost:5000/code/500';
+is $log_event->code, '500';
 
 done_testing;
 
