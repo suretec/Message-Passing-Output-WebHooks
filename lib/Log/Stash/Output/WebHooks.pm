@@ -10,13 +10,15 @@ with 'Log::Stash::Mixin::Output';
 
 sub consume {
     my ($self, $data) = @_;
-    my $body = $self->encode(shift());
+    my $body = $self->encode($data->{parameters});
     # XXX FIXME http://wiki.shopify.com/Verifying_Webhooks
     # HMAC goes here.
+    #warn "MAKE POST to " . $data->{url};
     my $headers = {};
     http_post $data->{url}, $body, headers => $headers, sub {
         my ($data, $headers) = @_;
-        
+        #warn "POST CALLBACK";
+        #use Data::Dumper; warn Dumper(\@_);
     };
 }
 

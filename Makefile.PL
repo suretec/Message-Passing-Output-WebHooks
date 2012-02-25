@@ -12,5 +12,8 @@ requires 'JSON';
 requires 'JSON::XS';
 requires 'Try::Tiny';
 
+test_requires 'Plack';
+test_requires 'Twiggy';
+
 WriteAll;
 
