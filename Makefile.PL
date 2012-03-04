@@ -4,6 +4,8 @@ use inc::Module::Install;
 
 all_from 'lib/Log/Stash/Output/WebHooks.pm';
 
+license 'AGPL_3';
+
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'AnyEvent';
