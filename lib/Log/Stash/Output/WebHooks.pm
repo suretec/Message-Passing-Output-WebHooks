@@ -83,7 +83,7 @@ Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
     {"@url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
 
     Causes:
-    
+
     POST /test HTTP/1.1
     Host: localhost:5000
     Content-Length: 13
@@ -93,14 +93,14 @@ Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
 
 =head1 WHAT IS A WEBHOOK
 
-A webhook is an a notification method used by APIs.
+A web-hook is an a notification method used by APIs.
 
 The idea is that you (as a client) define a URI on your website which is called when a certain action
 happens at your API provider. Some data relevant to the event is serialized out to you, allowing you
 to take action.
 
 The canonical example is Paypal's IPN system, in which Paypal make a call to your online payment system to
-verfiy that a payment has been made.
+verify that a payment has been made.
 
 See the L</SEE ALSO> section below for other examples.
 
@@ -120,7 +120,7 @@ The data to serialize out to the HTTP post request
 
 =back
 
-=head1 USEAGE
+=head1 USAGE
 
 As a L<Log::Stash> component, input is easy - if you're writing asynchronous perl code already,
 you can use the L<Log::Stash::Output::WebHooks> class directly in your perl code, or
@@ -136,6 +136,12 @@ To send messages, you can either use Java or Ruby logstash L<http://logstash.net
 if you're in perl, then it's entirely possible to use the L<ZeroMQ> output component,
 L<Log::Stash::Output::ZeroMQ> from within a normal perl application (via L<Log::Dispatch::Log::Stash>
 or directly).
+
+=head1 METHODS
+
+=head2 consume
+
+Generates and sends the post request from the message passed.
 
 =head1 SEE ALSO
 
@@ -168,7 +174,7 @@ Copyright Suretec Systems 2012.
 GNU Affero General Public License, Version 3
 
 If you feel this is too restrictive to be able to use this software,
-please talk to us as we'd be willing to consider relicensing under
+please talk to us as we'd be willing to consider re-licensing under
 less restrictive terms.
 
 =cut

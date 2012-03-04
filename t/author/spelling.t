@@ -4,6 +4,11 @@ use Test::More;
 use Test::Spelling;
 
 add_stopwords(qw(
+    APIs
+    IPN
+    URI
+    WEBHOOK
+    WebHooks
     Starman
     ZeroMQ
     API
