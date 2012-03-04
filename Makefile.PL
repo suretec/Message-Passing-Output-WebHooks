@@ -20,5 +20,19 @@ requires 'Log::Stash' => '0.001';
 test_requires 'Plack';
 test_requires 'Twiggy';
 
+author_requires 'Test::Pod' => '1.14';
+author_requires 'Test::NoTabs';
+author_requires 'Test::Pod::Coverage' => '1.04';
+author_requires 'Pod::Coverage' => '0.19';
+author_requires 'Pod::Coverage::TrustPod';
+author_requires 'Test::Spelling';
+
+author_tests 't/author';
+
+if ($Module::Install::AUTHOR) {
+    system("pod2text lib/Log/Stash/Output/Webhooks.pm > README")
+        and die $!;
+}
+
 WriteAll;
 

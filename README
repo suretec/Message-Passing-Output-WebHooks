@@ -1,0 +1,82 @@
+NAME
+    Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
+
+SYNOPSIS
+        logstash --input STDIN --output WebHooks
+
+        You type:
+        {"@url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
+
+        Causes:
+    
+        POST /test HTTP/1.1
+        Host: localhost:5000
+        Content-Length: 13
+        Content-Type application/json
+
+        {"foo":"bar"}
+
+WHAT IS A WEBHOOK
+    A webhook is an a notification method used by APIs.
+
+    The idea is that you (as a client) define a URI on your website which is
+    called when a certain action happens at your API provider. Some data
+    relevant to the event is serialized out to you, allowing you to take
+    action.
+
+    The canonical example is Paypal's IPN system, in which Paypal make a
+    call to your online payment system to verfiy that a payment has been
+    made.
+
+    See the "SEE ALSO" section below for other examples.
+
+DESCRIPTION
+    This class expects to have it's consume method called with a has of
+    parameters, including:
+
+    @url
+        The URL to make the request to.
+
+    data
+        The data to serialize out to the HTTP post request
+
+USEAGE
+    As a Log::Stash component, input is easy - if you're writing
+    asynchronous perl code already, you can use the
+    Log::Stash::Output::WebHooks class directly in your perl code, or you
+    can use Log::Dispatch::Log::Stash to divert your application logs into
+    it via the Log::Dispatch framework.
+
+    If you're not already an AnyEvent perl app (most people!), then you can
+    use Log::Stash::Input::STDIN, Log::Stash::Input::ZeroMQ or any other
+    input class, and the command line logstash utility supplied to run a
+    worker process, then send messages to it.
+
+    To send messages, you can either use Java or Ruby logstash
+    <http://logstash.net/>, or if you're in perl, then it's entirely
+    possible to use the ZeroMQ output component, Log::Stash::Output::ZeroMQ
+    from within a normal perl application (via Log::Dispatch::Log::Stash or
+    directly).
+
+SEE ALSO
+    Log::Stash
+    <http://logstash.net>
+    <http://wiki.shopify.com/WebHook>
+
+AUTHOR
+    Tomas (t0m) Doran <bobtfish@bobtfish.net>
+
+SPONSORSHIP
+    This module exists due to the wonderful people at Suretec Systems
+    <http://www.suretecsystems.com/> who sponsored it's development.
+
+COPYRIGHT
+    Copyright Suretec Systems 2012.
+
+LICENSE
+    GNU Affero General Public License, Version 3
+
+    If you feel this is too restrictive to be able to use this software,
+    please talk to us as we'd be willing to consider relicensing under less
+    restrictive terms.
+
