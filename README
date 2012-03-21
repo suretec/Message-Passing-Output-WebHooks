@@ -8,7 +8,7 @@ SYNOPSIS
         {"@url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
 
         Causes:
-    
+
         POST /test HTTP/1.1
         Host: localhost:5000
         Content-Length: 13
@@ -17,7 +17,7 @@ SYNOPSIS
         {"foo":"bar"}
 
 WHAT IS A WEBHOOK
-    A webhook is an a notification method used by APIs.
+    A web-hook is an a notification method used by APIs.
 
     The idea is that you (as a client) define a URI on your website which is
     called when a certain action happens at your API provider. Some data
@@ -25,7 +25,7 @@ WHAT IS A WEBHOOK
     action.
 
     The canonical example is Paypal's IPN system, in which Paypal make a
-    call to your online payment system to verfiy that a payment has been
+    call to your online payment system to verify that a payment has been
     made.
 
     See the "SEE ALSO" section below for other examples.
@@ -40,7 +40,7 @@ DESCRIPTION
     data
         The data to serialize out to the HTTP post request
 
-USEAGE
+USAGE
     As a Log::Stash component, input is easy - if you're writing
     asynchronous perl code already, you can use the
     Log::Stash::Output::WebHooks class directly in your perl code, or you
@@ -57,6 +57,10 @@ USEAGE
     possible to use the ZeroMQ output component, Log::Stash::Output::ZeroMQ
     from within a normal perl application (via Log::Dispatch::Log::Stash or
     directly).
+
+METHODS
+  consume
+    Generates and sends the post request from the message passed.
 
 SEE ALSO
     Log::Stash
@@ -77,6 +81,6 @@ LICENSE
     GNU Affero General Public License, Version 3
 
     If you feel this is too restrictive to be able to use this software,
-    please talk to us as we'd be willing to consider relicensing under less
+    please talk to us as we'd be willing to consider re-licensing under less
     restrictive terms.
 
