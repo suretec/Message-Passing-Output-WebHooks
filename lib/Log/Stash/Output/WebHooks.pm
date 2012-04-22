@@ -1,5 +1,7 @@
 package Log::Stash::Output::WebHooks;
 use Moose;
+use Log::Stash::Types;
+use Log::Stash::DSL;
 use AnyEvent::HTTP;
 use aliased 'Log::Stash::WebHooks::Event::Call::Success';
 use aliased 'Log::Stash::WebHooks::Event::Call::Timeout';
@@ -9,14 +11,24 @@ use namespace::autoclean;
 our $VERSION = '0.001';
 $VERSION = eval $VERSION;
 
-with 'Log::Stash::Role::Output';
+with 'Log::Stash::Role::Output',
+    'Log::Stash::Role::CLIComponent' => { name => 'log', default => 'Log::Stash::Output::Null' };
 
-has log => (
+has log_chain => (
     does => 'Log::Stash::Role::Output',
     handles => {
-        log => 'consume',
+        log_result => 'consume',
     },
-    default => sub { require Log::Stash::Output::Null; Log::Stash::Output::Null->new },
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        log_chain {
+            output log => (
+                class => $self->log,
+                $self->log_options,
+            );
+        };
+    },
 );
 
 has timeout => (
@@ -39,7 +51,7 @@ sub consume {
         cb => sub {
             undef $guard;
             undef $timer;
-            $self->log(Timeout->new(
+            $self->log_result(Timeout->new(
                 url => $data->{url},
             ));
         },
@@ -55,12 +67,12 @@ sub consume {
             my ($body, $headers) = @_;
             #warn "POST CALLBACK";
             if ($headers->{Status} =~ /2\d\d/) {
-                $self->log(Success->new(
+                $self->log_result(Success->new(
                     url => $data->{url},
                 ));
             }
             else {
-                $self->log(Failure->new(
+                $self->log_result(Failure->new(
                     url => $data->{url} || 'No url!',
                     code => $headers->{Status},
                 ));
