@@ -30,7 +30,7 @@ author_requires 'Test::Spelling';
 author_tests 't/author';
 
 if ($Module::Install::AUTHOR) {
-    system("pod2text lib/Log/Stash/Output/Webhooks.pm > README")
+    system("pod2text lib/Log/Stash/Output/WebHooks.pm > README")
         and die $!;
 }
 
