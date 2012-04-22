@@ -61,7 +61,7 @@ sub consume {
             }
             else {
                 $self->log(Failure->new(
-                    url => $data->{url},
+                    url => $data->{url} || 'No url!',
                     code => $headers->{Status},
                 ));
             }
@@ -80,7 +80,7 @@ Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
     logstash --input STDIN --output WebHooks
 
     You type:
-    {"@url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
+    {"url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
 
     Causes:
 
