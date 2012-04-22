@@ -29,6 +29,8 @@ author_requires 'Test::Spelling';
 
 author_tests 't/author';
 
+install_script 'script/logstash_webhooks';
+
 if ($Module::Install::AUTHOR) {
     system("pod2text lib/Log/Stash/Output/WebHooks.pm > README")
         and die $!;
