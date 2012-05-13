@@ -1,3 +1,6 @@
+    - Fix log_chain now returning an array.
+    - Make sure to build the logger chain at startup
+
 0.001
     - Initial version
 

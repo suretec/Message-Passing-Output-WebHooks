@@ -30,8 +30,8 @@ my $s = Twiggy::Server->new(port => 5000);
 $s->register_service($app);
 
 my $log_cv = AnyEvent->condvar;
-my $log = Log::Stash::Output::Test->new(
-    on_consume_cb => sub { $log_cv->send(shift()) },
+my $log = Log::Stash::Output::Callback->new(
+    cb => sub { $log_cv->send(shift()) },
 );
 my $output = Log::Stash::Output::WebHooks->new(log_chain => $log, timeout => 2,);
 
@@ -47,6 +47,10 @@ my $publish; $publish = AnyEvent->idle(cb => sub {
 
 is $cv->recv, '{"foo":"bar"}';
 
+my $t; $t = AnyEvent->timer(after => 5, cb => sub {
+    $log_cv->croak("Timed out");
+    undef $t;
+});
 my $log_event = $log_cv->recv;
 is $log_event . '', 'webhook call to http://localhost:5000/ succeeded';
 isa_ok($log_event, 'Log::Stash::WebHooks::Event::Call::Success');

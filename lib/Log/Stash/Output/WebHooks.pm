@@ -14,6 +14,11 @@ $VERSION = eval $VERSION;
 with 'Log::Stash::Role::Output',
     'Log::Stash::Role::CLIComponent' => { name => 'log', default => 'Log::Stash::Output::Null' };
 
+sub BUILD {
+    my $self = shift;
+    $self->log_chain;
+}
+
 has log_chain => (
     does => 'Log::Stash::Role::Output',
     handles => {
@@ -27,7 +32,7 @@ has log_chain => (
                 class => $self->log,
                 $self->log_options,
             );
-        };
+        }->[0];
     },
 );
 
@@ -65,7 +70,6 @@ sub consume {
             undef $guard;
             undef $timer;
             my ($body, $headers) = @_;
-            #warn "POST CALLBACK";
             if ($headers->{Status} =~ /2\d\d/) {
                 $self->log_result(Success->new(
                     url => $data->{url},
