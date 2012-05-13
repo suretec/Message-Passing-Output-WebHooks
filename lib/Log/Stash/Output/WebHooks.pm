@@ -6,6 +6,9 @@ use AnyEvent::HTTP;
 use aliased 'Log::Stash::WebHooks::Event::Call::Success';
 use aliased 'Log::Stash::WebHooks::Event::Call::Timeout';
 use aliased 'Log::Stash::WebHooks::Event::Call::Failure';
+use aliased 'Log::Stash::WebHooks::Event::Bad';
+use Log::Stash::DSL::Factory ();
+use Try::Tiny;
 use namespace::autoclean;
 
 our $VERSION = '0.001';
@@ -19,6 +22,10 @@ sub BUILD {
     $self->log_chain;
 }
 
+with 'Log::Stash::Role::CLIComponent' => {
+    name => 'log',
+};
+
 has log_chain => (
     is => 'ro',
     does => 'Log::Stash::Role::Output',
@@ -28,12 +35,9 @@ has log_chain => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        log_chain {
-            output log => (
-                class => $self->log,
-                $self->log_options,
-            );
-        }->[0];
+        my $class = Log::Stash::DSL::Factory->expand_class_name('Output', $self->log);
+        Class::MOP::load_class($class);
+        $class->new($self->log_options)
     },
 );
 
@@ -45,6 +49,14 @@ has timeout => (
 
 sub consume {
     my ($self, $data) = @_;
+    if (!exists($data->{data}) || !exists($data->{url})) {
+        try {
+            $self->log_result(Bad->new(
+                bad_event => $data,
+            ));
+        };
+        return;
+    }
     my $body = $self->encode($data->{data});
     # XXX FIXME http://wiki.shopify.com/Verifying_Webhooks
     # HMAC goes here.
