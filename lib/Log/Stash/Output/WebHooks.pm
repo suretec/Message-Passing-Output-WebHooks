@@ -20,6 +20,7 @@ sub BUILD {
 }
 
 has log_chain => (
+    is => 'ro',
     does => 'Log::Stash::Role::Output',
     handles => {
         log_result => 'consume',
