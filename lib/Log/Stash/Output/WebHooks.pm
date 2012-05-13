@@ -11,7 +11,7 @@ use Log::Stash::DSL::Factory ();
 use Try::Tiny;
 use namespace::autoclean;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 $VERSION = eval $VERSION;
 
 with 'Log::Stash::Role::Output',
