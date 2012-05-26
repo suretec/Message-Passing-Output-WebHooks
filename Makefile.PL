@@ -8,7 +8,10 @@ use Module::Install::Authority;
 all_from 'lib/Message/Passing/Output/WebHooks.pm';
 
 license 'AGPL_3';
-authority 'GHENRY';
+authority('GHENRY');
+resources(
+    repository => "git://github.com/suretec/Message-Passing-Output-WebHooks.git",
+);
 
 requires 'Moose';
 requires 'namespace::autoclean';
