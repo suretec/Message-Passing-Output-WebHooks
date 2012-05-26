@@ -5,7 +5,7 @@ use Module::Install::AuthorRequires;
 use Module::Install::AuthorTests;
 use Module::Install::Authority;
 
-all_from 'lib/Log/Stash/Output/WebHooks.pm';
+all_from 'lib/Message/Passing/Output/WebHooks.pm';
 
 license 'AGPL_3';
 authority 'GHENRY';
@@ -19,7 +19,7 @@ requires 'JSON::XS';
 requires 'Try::Tiny';
 requires 'Log::Message::Structured' => '0.005';
 requires 'aliased';
-requires 'Log::Stash' => '0.002';
+requires 'Message::Passing' => '0.002';
 
 test_requires 'Plack';
 test_requires 'Twiggy';
@@ -36,7 +36,7 @@ author_tests 't/author';
 install_script 'script/logstash_webhooks';
 
 if ($Module::Install::AUTHOR) {
-    system("pod2text lib/Log/Stash/Output/WebHooks.pm > README")
+    system("pod2text lib/Message/Passing/Output/WebHooks.pm > README")
         and die $!;
 }
 

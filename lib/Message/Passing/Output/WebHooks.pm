@@ -1,21 +1,20 @@
-package Log::Stash::Output::WebHooks;
+package Message::Passing::Output::WebHooks;
 use Moose;
-use Log::Stash::Types;
-use Log::Stash::DSL;
+use Message::Passing::Types;
+use Message::Passing::DSL;
 use AnyEvent::HTTP;
-use aliased 'Log::Stash::WebHooks::Event::Call::Success';
-use aliased 'Log::Stash::WebHooks::Event::Call::Timeout';
-use aliased 'Log::Stash::WebHooks::Event::Call::Failure';
-use aliased 'Log::Stash::WebHooks::Event::Bad';
 use Log::Stash::DSL::Factory ();
 use Try::Tiny;
+use aliased 'Message::Passing::WebHooks::Event::Call::Success';
+use aliased 'Message::Passing::WebHooks::Event::Call::Timeout';
+use aliased 'Message::Passing::WebHooks::Event::Call::Failure';
 use namespace::autoclean;
 
 our $VERSION = '0.002';
 $VERSION = eval $VERSION;
 
-with 'Log::Stash::Role::Output',
-    'Log::Stash::Role::CLIComponent' => { name => 'log', default => 'Log::Stash::Output::Null' };
+with 'Message::Passing::Role::Output',
+    'Message::Passing::Role::CLIComponent' => { name => 'log', default => 'Message::Passing::Output::Null' };
 
 sub BUILD {
     my $self = shift;
@@ -27,8 +26,12 @@ with 'Log::Stash::Role::CLIComponent' => {
 };
 
 has log_chain => (
+<<<<<<< HEAD
     is => 'ro',
     does => 'Log::Stash::Role::Output',
+=======
+    does => 'Message::Passing::Role::Output',
+>>>>>>> Rename
     handles => {
         log_result => 'consume',
     },
@@ -102,7 +105,7 @@ sub consume {
 
 =head1 NAME
 
-Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
+Message::Passing::Output::WebHooks - call 'WebHooks' with logstash messages.
 
 =head1 SYNOPSIS
 
@@ -151,19 +154,19 @@ The data to serialize out to the HTTP post request
 
 =head1 USAGE
 
-As a L<Log::Stash> component, input is easy - if you're writing asynchronous perl code already,
-you can use the L<Log::Stash::Output::WebHooks> class directly in your perl code, or
-you can use L<Log::Dispatch::Log::Stash> to divert your application logs into it via the
+As a L<Message::Passing> component, input is easy - if you're writing asynchronous perl code already,
+you can use the L<Message::Passing::Output::WebHooks> class directly in your perl code, or
+you can use L<Log::Dispatch::Message::Passing> to divert your application logs into it via the
 L<Log::Dispatch> framework. 
 
 If you're not already an L<AnyEvent> perl app (most people!), then you can use
-L<Log::Stash::Input::STDIN>, L<Log::Stash::Input::ZeroMQ>
+L<Message::Passing::Input::STDIN>, L<Message::Passing::Input::ZeroMQ>
 or any other input class, and the command line logstash utility supplied to run a worker
 process, then send messages to it.
 
 To send messages, you can either use Java or Ruby logstash L<http://logstash.net/>, or
 if you're in perl, then it's entirely possible to use the L<ZeroMQ> output component,
-L<Log::Stash::Output::ZeroMQ> from within a normal perl application (via L<Log::Dispatch::Log::Stash>
+L<Message::Passing::Output::ZeroMQ> from within a normal perl application (via L<Log::Dispatch::Message::Passing>
 or directly).
 
 =head1 METHODS
@@ -176,7 +179,7 @@ Generates and sends the post request from the message passed.
 
 =over
 
-=item L<Log::Stash>
+=item L<Message::Passing>
 
 =item L<http://logstash.net>
 

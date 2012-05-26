@@ -1,4 +1,4 @@
-package Log::Stash::WebHooks::Event::Call;
+package Message::Passing::WebHooks::Event::Call;
 use Moose::Role;
 
 has url => (

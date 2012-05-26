@@ -3,19 +3,19 @@ use FindBin qw/ $Bin /;
 use lib "$Bin/../lib"; # FIXME
 use strict;
 use warnings;
-use Log::Stash;
+use Message::Passing;
 
 {
     package # PAUSE hide
-        Log::Stash::Script::WebHooks;
+        Message::Passing::Script::WebHooks;
     use Moose;
 
-    extends 'Log::Stash';
+    extends 'Message::Passing';
 
     has '+output' => (
         traits => ['NoGetopt'],
     );
 }
 
-Log::Stash::Script::WebHooks->start( output => 'WebHooks' );
+Message::Passing::Script::WebHooks->start( output => 'WebHooks' );
 

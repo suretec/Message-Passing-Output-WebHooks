@@ -1,5 +1,6 @@
 NAME
-    Log::Stash::Output::WebHooks - call 'WebHooks' with logstash messages.
+    Message::Passing::Output::WebHooks - call 'WebHooks' with logstash
+    messages.
 
 SYNOPSIS
         logstash --input STDIN --output WebHooks
@@ -41,29 +42,29 @@ DESCRIPTION
         The data to serialize out to the HTTP post request
 
 USAGE
-    As a Log::Stash component, input is easy - if you're writing
+    As a Message::Passing component, input is easy - if you're writing
     asynchronous perl code already, you can use the
-    Log::Stash::Output::WebHooks class directly in your perl code, or you
-    can use Log::Dispatch::Log::Stash to divert your application logs into
-    it via the Log::Dispatch framework.
+    Message::Passing::Output::WebHooks class directly in your perl code, or
+    you can use Log::Dispatch::Message::Passing to divert your application
+    logs into it via the Log::Dispatch framework.
 
     If you're not already an AnyEvent perl app (most people!), then you can
-    use Log::Stash::Input::STDIN, Log::Stash::Input::ZeroMQ or any other
-    input class, and the command line logstash utility supplied to run a
-    worker process, then send messages to it.
+    use Message::Passing::Input::STDIN, Message::Passing::Input::ZeroMQ or
+    any other input class, and the command line logstash utility supplied to
+    run a worker process, then send messages to it.
 
     To send messages, you can either use Java or Ruby logstash
     <http://logstash.net/>, or if you're in perl, then it's entirely
-    possible to use the ZeroMQ output component, Log::Stash::Output::ZeroMQ
-    from within a normal perl application (via Log::Dispatch::Log::Stash or
-    directly).
+    possible to use the ZeroMQ output component,
+    Message::Passing::Output::ZeroMQ from within a normal perl application
+    (via Log::Dispatch::Message::Passing or directly).
 
 METHODS
   consume
     Generates and sends the post request from the message passed.
 
 SEE ALSO
-    Log::Stash
+    Message::Passing
     <http://logstash.net>
     <http://wiki.shopify.com/WebHook>
 

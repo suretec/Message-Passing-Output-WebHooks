@@ -1,7 +1,7 @@
-package Log::Stash::WebHooks::Event::Call::Failure;
+package Message::Passing::WebHooks::Event::Call::Failure;
 use Moose;
 
-with 'Log::Stash::WebHooks::Event::Call';
+with 'Message::Passing::WebHooks::Event::Call';
 
 has code => (
     isa => 'Int',

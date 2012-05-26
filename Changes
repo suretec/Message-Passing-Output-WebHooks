@@ -1,3 +1,5 @@
+    - Rename
+
 0.002
     - Fix log_chain now returning an array.
     - Make sure to build the logger chain at startup

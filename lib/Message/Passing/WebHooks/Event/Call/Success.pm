@@ -1,10 +1,10 @@
-package Log::Stash::WebHooks::Event::Call::Timeout;
+package Message::Passing::WebHooks::Event::Call::Success;
 use Moose;
 
-with 'Log::Stash::WebHooks::Event::Call';
+with 'Message::Passing::WebHooks::Event::Call';
 
 with 'Log::Message::Structured::Stringify::Sprintf' => {
-    format_string => "webhook call to %s timed out",
+    format_string => "webhook call to %s succeeded",
     attributes => [qw/ url /],
 }, 'Log::Message::Structured';
 
