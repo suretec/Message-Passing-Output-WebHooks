@@ -26,12 +26,8 @@ with 'Log::Stash::Role::CLIComponent' => {
 };
 
 has log_chain => (
-<<<<<<< HEAD
     is => 'ro',
-    does => 'Log::Stash::Role::Output',
-=======
     does => 'Message::Passing::Role::Output',
->>>>>>> Rename
     handles => {
         log_result => 'consume',
     },
