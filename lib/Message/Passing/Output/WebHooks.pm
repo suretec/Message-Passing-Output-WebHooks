@@ -3,11 +3,12 @@ use Moose;
 use Message::Passing::Types;
 use Message::Passing::DSL;
 use AnyEvent::HTTP;
-use Log::Stash::DSL::Factory ();
+use Message::Passing::DSL::Factory ();
 use Try::Tiny;
 use aliased 'Message::Passing::WebHooks::Event::Call::Success';
 use aliased 'Message::Passing::WebHooks::Event::Call::Timeout';
 use aliased 'Message::Passing::WebHooks::Event::Call::Failure';
+use aliased 'Message::Passing::WebHooks::Event::Bad';
 use namespace::autoclean;
 
 our $VERSION = '0.002';
@@ -21,7 +22,7 @@ sub BUILD {
     $self->log_chain;
 }
 
-with 'Log::Stash::Role::CLIComponent' => {
+with 'Message::Passing::Role::CLIComponent' => {
     name => 'log',
 };
 
@@ -34,7 +35,7 @@ has log_chain => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        my $class = Log::Stash::DSL::Factory->expand_class_name('Output', $self->log);
+        my $class = Message::Passing::DSL::Factory->expand_class_name('Output', $self->log);
         Class::MOP::load_class($class);
         $class->new($self->log_options)
     },

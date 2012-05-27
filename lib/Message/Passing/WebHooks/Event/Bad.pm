@@ -1,4 +1,4 @@
-package Log::Stash::WebHooks::Event::Bad;
+package Message::Passing::WebHooks::Event::Bad;
 use Moose;
 
 has bad_event => (
