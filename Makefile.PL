@@ -38,7 +38,7 @@ author_requires(
 
 author_tests 't/author';
 
-install_script 'script/message-passing_webhooks';
+install_script 'script/message-pass_webhooks';
 
 if ($Module::Install::AUTHOR) {
     system("pod2text lib/Message/Passing/Output/WebHooks.pm > README")

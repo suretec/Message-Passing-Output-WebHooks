@@ -106,7 +106,7 @@ Message::Passing::Output::WebHooks - call 'WebHooks' with messages.
 
 =head1 SYNOPSIS
 
-    message-pass --input STDIN --output WebHooks
+    message-pass_webhooks --input STDIN
 
     You type:
     {"url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
