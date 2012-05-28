@@ -11,7 +11,7 @@ use aliased 'Message::Passing::WebHooks::Event::Call::Failure';
 use aliased 'Message::Passing::WebHooks::Event::Bad';
 use namespace::autoclean;
 
-our $VERSION = '0.002_01';
+our $VERSION = '0.003';
 $VERSION = eval $VERSION;
 
 with 'Message::Passing::Role::Output',
