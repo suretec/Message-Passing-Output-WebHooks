@@ -1,9 +1,8 @@
 NAME
-    Message::Passing::Output::WebHooks - call 'WebHooks' with logstash
-    messages.
+    Message::Passing::Output::WebHooks - call 'WebHooks' with messages.
 
 SYNOPSIS
-        logstash --input STDIN --output WebHooks
+        message-pass --input STDIN --output WebHooks
 
         You type:
         {"url": "http://localhost:5000/test","@type":"WebHooks","data":{"foo":"bar"}}
@@ -50,8 +49,8 @@ USAGE
 
     If you're not already an AnyEvent perl app (most people!), then you can
     use Message::Passing::Input::STDIN, Message::Passing::Input::ZeroMQ or
-    any other input class, and the command line logstash utility supplied to
-    run a worker process, then send messages to it.
+    any other input class, and the command line message-pass utility
+    supplied to run a worker process, then send messages to it.
 
     To send messages, you can either use Java or Ruby logstash
     <http://logstash.net/>, or if you're in perl, then it's entirely
