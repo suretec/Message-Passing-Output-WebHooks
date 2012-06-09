@@ -16,6 +16,12 @@ SYNOPSIS
 
         {"foo":"bar"}
 
+        # Consume messages from ZeroMQ, and publish results to
+        # ZeroMQ:
+        message-pass_webhooks --input ZeroMQ --input_options \
+            '{"socket_bind":"tcp://*:5558"}' --log ZeroMQ \
+            --log_options '{"connect":"tcp://192.168.0.1:5559"}'
+
 WHAT IS A WEBHOOK
     A web-hook is an a notification method used by APIs.
 
@@ -27,8 +33,6 @@ WHAT IS A WEBHOOK
     The canonical example is Paypal's IPN system, in which Paypal make a
     call to your online payment system to verify that a payment has been
     made.
-
-    See the "SEE ALSO" section below for other examples.
 
 DESCRIPTION
     This class expects to have it's consume method called with a has of
@@ -57,6 +61,42 @@ USAGE
     possible to use the ZeroMQ output component,
     Message::Passing::Output::ZeroMQ from within a normal perl application
     (via Log::Dispatch::Message::Passing or directly).
+
+LOGGING
+    This output publishes one message for each message recieved, logging the
+    status of the webhook call after it completes.
+
+    The log output can be setup on command line as documented in the
+    SYNOPSIS, or if you're building classes manually, you can supply the
+    "log_chain" attribute yourself.
+
+    Events that can be logged are:
+
+  Message::Passing::WebHooks::Event::Bad.
+    The message recieved was missing either a @url or a " data " field,
+    meaning it could not be used for a webhook call.
+
+  Message::Passing::WebHooks::Event::Call::Success.
+    The call succeeded, and a 2XX status was received from the remote server
+
+  Message::Passing::WebHooks::Event::Call::Failure.
+    The call failed, due to a bad server or the server returning an error
+    status.
+
+  Message::Passing::WebHooks::Event::Call::Timeout.
+    The remote server failed to respond within the timeout configured so the
+    request was aborted.
+
+ATTRIBUTES
+  log_chain
+    Holds a chain of Message::Passing filters and outputs.
+
+    Defaults to Message::Passing::Output::Null, causing all status reports
+    to be discarded.
+
+  timeout
+    Integer number of seconds, after which webhook connections are timed
+    out.
 
 METHODS
   consume

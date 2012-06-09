@@ -9,6 +9,7 @@ use aliased 'Message::Passing::WebHooks::Event::Call::Success';
 use aliased 'Message::Passing::WebHooks::Event::Call::Timeout';
 use aliased 'Message::Passing::WebHooks::Event::Call::Failure';
 use aliased 'Message::Passing::WebHooks::Event::Bad';
+use JSON qw/ encode_json /;
 use namespace::autoclean;
 
 our $VERSION = '0.004';
@@ -57,7 +58,7 @@ sub consume {
         };
         return;
     }
-    my $body = $self->encode($data->{data});
+    my $body = encode_json($data->{data});
     # XXX FIXME http://wiki.shopify.com/Verifying_Webhooks
     # HMAC goes here.
     #warn "MAKE POST to " . $data->{url};
@@ -120,6 +121,12 @@ Message::Passing::Output::WebHooks - call 'WebHooks' with messages.
 
     {"foo":"bar"}
 
+    # Consume messages from ZeroMQ, and publish results to
+    # ZeroMQ:
+    message-pass_webhooks --input ZeroMQ --input_options \
+        '{"socket_bind":"tcp://*:5558"}' --log ZeroMQ \
+        --log_options '{"connect":"tcp://192.168.0.1:5559"}'
+
 =head1 WHAT IS A WEBHOOK
 
 A web-hook is an a notification method used by APIs.
@@ -130,8 +137,6 @@ to take action.
 
 The canonical example is Paypal's IPN system, in which Paypal make a call to your online payment system to
 verify that a payment has been made.
-
-See the L</SEE ALSO> section below for other examples.
 
 =head1 DESCRIPTION
 
@@ -165,6 +170,50 @@ To send messages, you can either use Java or Ruby logstash L<http://logstash.net
 if you're in perl, then it's entirely possible to use the L<ZeroMQ> output component,
 L<Message::Passing::Output::ZeroMQ> from within a normal perl application (via L<Log::Dispatch::Message::Passing>
 or directly).
+
+=head1 LOGGING
+
+This output publishes one message for each message received, logging
+the status of the HTTP call after it completes.
+
+The log output can be setup on command line as documented in the SYNOPSIS,
+or if you're building classes manually, you can supply the C<log_chain>
+attribute yourself.
+
+Events that can be logged are:
+
+=head2 L<Message::Passing::WebHooks::Event::Bad>.
+
+The message received was missing either a C< @url > or a C< data >
+field, meaning it could not be used for a HTTP request.
+
+=head2 L<Message::Passing::WebHooks::Event::Call::Success>.
+
+The call succeeded, and a 2XX status was received from the remote
+server
+
+=head2 L<Message::Passing::WebHooks::Event::Call::Failure>.
+
+The call failed, due to a bad server or the server returning an error
+status.
+
+=head2 L<Message::Passing::WebHooks::Event::Call::Timeout>.
+
+The remote server failed to respond within the timeout configured
+so the request was aborted.
+
+=head1 ATTRIBUTES
+
+=head2 log_chain
+
+Holds a chain of L<Message::Passing> filters and outputs.
+
+Defaults to L<Message::Passing::Output::Null>, causing all status reports
+to be discarded.
+
+=head2 timeout
+
+Integer number of seconds, after which HTTP connections are timed out.
 
 =head1 METHODS
 

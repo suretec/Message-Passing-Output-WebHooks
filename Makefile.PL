@@ -17,12 +17,11 @@ requires 'Moose';
 requires 'namespace::autoclean';
 requires 'AnyEvent';
 requires 'AnyEvent::HTTP';
-requires 'JSON';
-requires 'JSON::XS';
+requires 'JSON' => '2.0';
 requires 'Try::Tiny';
 requires 'Log::Message::Structured' => '0.005';
 requires 'aliased';
-requires 'Message::Passing' => '0.002';
+requires 'Message::Passing' => '0.006';
 
 test_requires 'Plack';
 test_requires 'Twiggy';

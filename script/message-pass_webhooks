@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 use FindBin qw/ $Bin /;
-use lib "$Bin/../lib"; # FIXME
 use strict;
 use warnings;
 use Message::Passing;
@@ -11,6 +10,11 @@ use Message::Passing;
     use Moose;
 
     extends 'Message::Passing';
+
+    has '+encoder' => (
+        init_arg => undef,
+        default => '+Message::Passing::Filter::Encoder::Null',
+    );
 
     has '+output' => (
         traits => ['NoGetopt'],

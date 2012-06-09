@@ -1,3 +1,7 @@
+   - Update documentation to include more details about logging
+
+   - Fix for Message::Passing 0.006
+
 0.004
    - Rename script to be consistent
 
