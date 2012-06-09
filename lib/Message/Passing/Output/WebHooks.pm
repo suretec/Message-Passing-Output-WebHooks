@@ -12,7 +12,7 @@ use aliased 'Message::Passing::WebHooks::Event::Bad';
 use JSON qw/ encode_json /;
 use namespace::autoclean;
 
-our $VERSION = '0.004';
+our $VERSION = '0.005';
 $VERSION = eval $VERSION;
 
 with 'Message::Passing::Role::Output',
