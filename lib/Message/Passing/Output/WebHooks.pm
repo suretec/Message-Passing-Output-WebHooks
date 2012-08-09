@@ -12,11 +12,11 @@ use aliased 'Message::Passing::WebHooks::Event::Bad';
 use JSON qw/ encode_json /;
 use namespace::autoclean;
 
-our $VERSION = '0.005';
+our $VERSION = '0.006';
 $VERSION = eval $VERSION;
 
 with 'Message::Passing::Role::Output',
-    'Message::Passing::Role::CLIComponent' => { name => 'log', default => 'Message::Passing::Output::Null' };
+    'Message::Passing::Role::CLIComponent' => { name => 'log', default => 'Null' };
 
 sub BUILD {
     my $self = shift;
