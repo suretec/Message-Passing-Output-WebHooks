@@ -30,7 +30,7 @@ WHAT IS A WEBHOOK
     relevant to the event is serialized out to you, allowing you to take
     action.
 
-    The canonical example is Paypal's IPN system, in which Paypal make a
+    The canonical example is PayPal's IPN system, in which PayPal make a
     call to your online payment system to verify that a payment has been
     made.
 
@@ -38,8 +38,7 @@ DESCRIPTION
     This class expects to have it's consume method called with a has of
     parameters, including:
 
-    @url
-        The URL to make the request to.
+    url The URL to make the request to.
 
     data
         The data to serialize out to the HTTP post request
@@ -63,8 +62,8 @@ USAGE
     (via Log::Dispatch::Message::Passing or directly).
 
 LOGGING
-    This output publishes one message for each message recieved, logging the
-    status of the webhook call after it completes.
+    This output publishes one message for each message received, logging the
+    status of the HTTP call after it completes.
 
     The log output can be setup on command line as documented in the
     SYNOPSIS, or if you're building classes manually, you can supply the
@@ -73,8 +72,8 @@ LOGGING
     Events that can be logged are:
 
   Message::Passing::WebHooks::Event::Bad.
-    The message recieved was missing either a @url or a " data " field,
-    meaning it could not be used for a webhook call.
+    The message received was missing either a " url " or a " data " field,
+    meaning it could not be used for a HTTP request.
 
   Message::Passing::WebHooks::Event::Call::Success.
     The call succeeded, and a 2XX status was received from the remote server
@@ -95,8 +94,7 @@ ATTRIBUTES
     to be discarded.
 
   timeout
-    Integer number of seconds, after which webhook connections are timed
-    out.
+    Integer number of seconds, after which HTTP connections are timed out.
 
 METHODS
   consume

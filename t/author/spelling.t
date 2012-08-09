@@ -29,6 +29,10 @@ add_stopwords(qw(
     STDOUT
     STDERR
     logstash
+    PayPal
+    PayPal's
+    online
+    url
 ));
 set_spell_cmd('aspell list -l en');
 all_pod_files_spelling_ok();
