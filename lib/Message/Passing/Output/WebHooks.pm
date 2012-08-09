@@ -12,7 +12,7 @@ use aliased 'Message::Passing::WebHooks::Event::Bad';
 use JSON qw/ encode_json /;
 use namespace::autoclean;
 
-our $VERSION = '0.006';
+our $VERSION = '0.007';
 $VERSION = eval $VERSION;
 
 with 'Message::Passing::Role::Output',
@@ -62,7 +62,7 @@ sub consume {
     # XXX FIXME http://wiki.shopify.com/Verifying_Webhooks
     # HMAC goes here.
     #warn "MAKE POST to " . $data->{url};
-    my $headers = {};
+    my $headers = { 'Content-Type' => 'application/json' };
     my $timeout = $self->timeout;
     my ($timer, $guard);
     $timer = AnyEvent->timer(
@@ -117,7 +117,7 @@ Message::Passing::Output::WebHooks - call 'WebHooks' with messages.
     POST /test HTTP/1.1
     Host: localhost:5000
     Content-Length: 13
-    Content-Type application/json
+    Content-Type: application/json
 
     {"foo":"bar"}
 

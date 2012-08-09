@@ -1,3 +1,6 @@
+0.007 
+   - Add Content-Type: application/json
+
 0.006
    - Should be Null not Message::Passing::Output::Null in WebHooks.pm
     
