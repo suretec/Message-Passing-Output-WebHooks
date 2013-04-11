@@ -1,6 +1,5 @@
 package Message::Passing::Output::WebHooks;
 use Moose;
-use Message::Passing::Types;
 use Message::Passing::DSL;
 use AnyEvent::HTTP;
 use Message::Passing::DSL::Factory ();
