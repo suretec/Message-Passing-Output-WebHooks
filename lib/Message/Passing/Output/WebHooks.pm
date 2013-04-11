@@ -1,5 +1,5 @@
 package Message::Passing::Output::WebHooks;
-use Moose;
+use Moo;
 use Message::Passing::DSL;
 use AnyEvent::HTTP;
 use Message::Passing::DSL::Factory ();
@@ -8,23 +8,22 @@ use aliased 'Message::Passing::WebHooks::Event::Call::Success';
 use aliased 'Message::Passing::WebHooks::Event::Call::Timeout';
 use aliased 'Message::Passing::WebHooks::Event::Call::Failure';
 use aliased 'Message::Passing::WebHooks::Event::Bad';
+use MooX::Types::MooseLike::Base qw/ Int /;
 use JSON qw/ encode_json /;
-use namespace::autoclean;
+use MooX::Options flavour => [qw( pass_through )], protect_argv => 0;
+use Message::Passing::Role::CLIComponent;
+#use namespace::clean -except => [qw/ meta new_with_options parse_options _options_data _options_config/];
 
 our $VERSION = '0.007';
 $VERSION = eval $VERSION;
 
 with 'Message::Passing::Role::Output',
-    'Message::Passing::Role::CLIComponent' => { name => 'log', default => 'Null' };
+    CLIComponent( name => 'log', default => 'Null' );
 
 sub BUILD {
     my $self = shift;
     $self->log_chain;
 }
-
-with 'Message::Passing::Role::CLIComponent' => {
-    name => 'log',
-};
 
 has log_chain => (
     is => 'ro',
@@ -42,9 +41,9 @@ has log_chain => (
 );
 
 has timeout => (
-    isa => 'Int',
+    isa => Int,
     is => 'ro',
-    default => 300,
+    default => sub { 300 },
 );
 
 sub consume {

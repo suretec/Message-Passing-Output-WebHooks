@@ -13,8 +13,9 @@ resources(
     repository => "git://github.com/suretec/Message-Passing-Output-WebHooks.git",
 );
 
-requires 'Moose';
-requires 'namespace::autoclean';
+requires 'Moo';
+requires 'MooX::Types::MooseLike';
+requires 'namespace::clean';
 requires 'AnyEvent';
 requires 'AnyEvent::HTTP';
 requires 'JSON' => '2.0';
