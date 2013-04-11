@@ -1,9 +1,12 @@
-0.007 
+
+  - Convert to Moo
+
+0.007
    - Add Content-Type: application/json
 
 0.006
    - Should be Null not Message::Passing::Output::Null in WebHooks.pm
-    
+
    - Fix docs and spelling tests
 
 0.005
