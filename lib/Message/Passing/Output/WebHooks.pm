@@ -14,7 +14,7 @@ use MooX::Options flavour => [qw( pass_through )], protect_argv => 0;
 use Message::Passing::Role::CLIComponent;
 #use namespace::clean -except => [qw/ meta new_with_options parse_options _options_data _options_config/];
 
-our $VERSION = '0.007';
+our $VERSION = '0.008';
 $VERSION = eval $VERSION;
 
 with 'Message::Passing::Role::Output',
